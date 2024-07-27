@@ -15,13 +15,4 @@ jobs:
       - name: Run Trivy scan
         run: |
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-            aquasec/trivy image --severity CRITICAL alpine:latest > result.txt
-            cat result.txt
-
-      - name: Check for critical vulnerabilities
-        run: |
-          if grep -q "CRITICAL" result.txt; then
-            echo "Critical vulnerabilities found!"
-          else
-            echo "No critical vulnerabilities found. Scan successful."
-          fi
+            aquasec/trivy image --severity CRITICAL alpine:latest 
