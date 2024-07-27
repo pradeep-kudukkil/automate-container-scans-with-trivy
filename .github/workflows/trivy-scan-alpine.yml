@@ -21,7 +21,7 @@ jobs:
 
       - name: Run Trivy scan
         run: |
-          docker pull nginx:latest
+          docker pull alpine:latest 
           trivy image --severity CRITICAL alpine:latest 
  
  
