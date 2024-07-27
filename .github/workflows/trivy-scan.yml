@@ -1,9 +1,12 @@
 name: Trivy Scan
 
-on: [workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  trivy:
+  scan:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -12,7 +15,16 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v1
 
-      - name: Scan Docker image for vulnerabilities
+      - name: Run Trivy scan
         run: |
           docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
-            aquasec/trivy image nginx:latest
+            aquasec/trivy image --severity CRITICAL nginx:latest > result.txt
+
+      - name: Check for critical vulnerabilities
+        run: |
+          if grep -q "CRITICAL" result.txt; then
+            echo "Critical vulnerabilities found!"
+            exit 1
+          else
+            echo "No critical vulnerabilities found. Scan successful."
+          fi
