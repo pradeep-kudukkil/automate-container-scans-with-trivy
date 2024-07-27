@@ -25,6 +25,7 @@ jobs:
         run: |
           if grep -q "CRITICAL" result.txt; then
             echo "Critical vulnerabilities found!"
+            exit 1
           else
             echo "No critical vulnerabilities found. Scan successful."
           fi
